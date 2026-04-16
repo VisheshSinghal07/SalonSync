@@ -1,9 +1,11 @@
 package com.example.salonsync;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +16,7 @@ public class SignupActivity extends AppCompatActivity {
     EditText etName, etPhone, etPassword;
     Button btnSignup;
     TextView tvLogin;
+    ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,14 @@ public class SignupActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnSignup = findViewById(R.id.btnSignup);
         tvLogin = findViewById(R.id.tvLogin);
+        btnBack = findViewById(R.id.btnBack);
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +72,8 @@ public class SignupActivity extends AppCompatActivity {
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SignupActivity.this, "Go to Login Page", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SignupActivity.this, LoginPage.class);
+                startActivity(intent);
             }
         });
     }

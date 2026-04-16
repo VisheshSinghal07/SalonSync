@@ -21,7 +21,7 @@
         android:id="@+id/tvHeaderTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign Up"
+        android:text="Log In"
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Create Account"
+        android:text="Welcome Back"
         android:textColor="#000000"
         android:textSize="32sp"
         android:textStyle="bold"
@@ -46,7 +46,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Join SalonSync to book your next salon appointment."
+        android:text="Log in to your account to book your next salon appointment."
         android:textColor="#888888"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,48 +54,26 @@
         app:layout_constraintTop_toBottomOf="@id/tvWelcome" />
 
     <TextView
-        android:id="@+id/labelName"
+        android:id="@+id/labelEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Full Name"
+        android:text="Email or Phone Number"
         android:textStyle="bold"
         android:textColor="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvSubtext" />
 
     <EditText
-        android:id="@+id/etName"
+        android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/edittext_border"
-        android:hint="Enter your full name"
+        android:hint="Enter your email or phone"
         android:padding="12dp"
-        android:inputType="textPersonName"
-        app:layout_constraintTop_toBottomOf="@id/labelName" />
-
-    <TextView
-        android:id="@+id/labelPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Phone Number"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etName" />
-
-    <EditText
-        android:id="@+id/etPhone"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/edittext_border"
-        android:hint="Enter your phone number"
-        android:padding="12dp"
-        android:inputType="phone"
-        app:layout_constraintTop_toBottomOf="@id/labelPhone" />
+        android:inputType="textEmailAddress"
+        app:layout_constraintTop_toBottomOf="@id/labelEmail" />
 
     <TextView
         android:id="@+id/labelPassword"
@@ -106,40 +84,56 @@
         android:textStyle="bold"
         android:textColor="#000000"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etPhone" />
+        app:layout_constraintTop_toBottomOf="@id/etEmail" />
 
-    <EditText
-        android:id="@+id/etPassword"
+    <FrameLayout
+        android:id="@+id/passwordContainer"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/edittext_border"
-        android:hint="Create a password"
-        android:inputType="textPassword"
-        android:padding="12dp"
-        app:layout_constraintTop_toBottomOf="@id/labelPassword" />
+        app:layout_constraintTop_toBottomOf="@id/labelPassword">
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/edittext_border"
+            android:hint="Enter your password"
+            android:inputType="textPassword"
+            android:padding="12dp" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="12dp"
+            android:src="@android:drawable/ic_menu_view"
+            android:alpha="0.5" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvForgotPwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Forgot Password?"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passwordContainer" />
 
     <Button
-        android:id="@+id/btnSignup"
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginBottom="32dp"
         android:backgroundTint="#C49A6C"
-        android:text="Sign Up"
+        android:text="Log In"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <TextView
-        android:id="@+id/tvLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Already have an account? Log In"
-        app:layout_constraintBottom_toTopOf="@id/btnSignup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
