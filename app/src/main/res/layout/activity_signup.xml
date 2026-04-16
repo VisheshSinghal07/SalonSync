@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <TextView
             android:text="Create Account"
             android:textSize="24sp"
@@ -39,23 +38,22 @@
         <EditText
             android:id="@+id/etName"
             android:hint="Enter your full name"
-            android:background="@android:drawable/edit_text"
             android:padding="12dp"
             android:layout_marginTop="6dp"
             android:layout_width="match_parent"
             android:layout_height="48dp"/>
 
         <TextView
-            android:text="Email or Phone Number"
+            android:text="Phone Number"
             android:layout_marginTop="16dp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <EditText
-            android:id="@+id/etEmail"
-            android:hint="Enter your email or phone"
-            android:inputType="textEmailAddress"
+            android:id="@+id/etPhone"
+            android:hint="Enter your phone number"
+            android:inputType="phone"
             android:padding="12dp"
             android:layout_marginTop="6dp"
             android:layout_width="match_parent"
@@ -85,7 +83,7 @@
             android:layout_marginTop="32dp"
             android:layout_width="match_parent"
             android:layout_height="50dp"/>
-        
+
         <TextView
             android:id="@+id/tvLogin"
             android:text="Already have an account? Log In"
