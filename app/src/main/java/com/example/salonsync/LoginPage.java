@@ -1,5 +1,6 @@
 package com.example.salonsync;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,6 +39,9 @@ public class LoginPage extends AppCompatActivity {
     }
 
     private void performLogin(String email, String password) {
-        Toast.makeText(this, "Attempting login...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(LoginPage.this, HomePage.class);
+        startActivity(intent);
+        finish();
     }
 }
