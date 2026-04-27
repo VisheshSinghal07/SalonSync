@@ -14,24 +14,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Dashboard extends AppCompatActivity {
+public class AdminBookingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_admin_bookings);
 
-        // 1. Setup RecyclerView
-        RecyclerView rvBookings = findViewById(R.id.rvBookings);
+        RecyclerView rvBookings = findViewById(R.id.rvUpcomingBookings);
         rvBookings.setLayoutManager(new LinearLayoutManager(this));
 
-        // 2. Prepare Data
-        List<Booking> list = new ArrayList<>();
-        list.add(new Booking("Sarah Jenkins", "Balayage & Blowdry", "11:00 AM", "Upcoming"));
-        list.add(new Booking("Maya Roberts", "Classic Manicure", "01:30 PM", "Upcoming"));
-        list.add(new Booking("Emily Clark", "Root Touch-up", "03:00 PM", "Completed"));
+        List<Dashboard.Booking> list = new ArrayList<>();
+        list.add(new Dashboard.Booking("Sarah Jenkins", "Balayage & Blowdry", "11:00 AM", "Upcoming"));
+        list.add(new Dashboard.Booking("Maya Roberts", "Classic Manicure", "01:30 PM", "Upcoming"));
+        list.add(new Dashboard.Booking("Jessica Alba", "Hair Coloring", "04:00 PM", "Upcoming"));
+        list.add(new Dashboard.Booking("David Beckham", "Men's Trim", "05:30 PM", "Upcoming"));
 
-        // 3. Set Adapter
         BookingAdapter adapter = new BookingAdapter(list);
         rvBookings.setAdapter(adapter);
 
@@ -39,34 +37,19 @@ public class Dashboard extends AppCompatActivity {
     }
 
     private void setupNavigation() {
-        findViewById(R.id.navBookings).setOnClickListener(v -> {
-            startActivity(new Intent(this, AdminBookingsActivity.class));
+        findViewById(R.id.navDashboard).setOnClickListener(v -> {
+            startActivity(new Intent(this, Dashboard.class));
             finish();
         });
+        
+        // navBookings is already active
     }
 
-    // --- INNER DATA MODEL CLASS ---
-    public static class Booking {
-        private String name, service, time, status;
+    // Reuse adapter logic for simplicity in this activity
+    private class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingViewHolder> {
+        private List<Dashboard.Booking> bookingList;
 
-        public Booking(String name, String service, String time, String status) {
-            this.name = name;
-            this.service = service;
-            this.time = time;
-            this.status = status;
-        }
-
-        public String getName() { return name; }
-        public String getService() { return service; }
-        public String getTime() { return time; }
-        public String getStatus() { return status; }
-    }
-
-    // --- INNER ADAPTER CLASS ---
-    public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingViewHolder> {
-        private List<Booking> bookingList;
-
-        public BookingAdapter(List<Booking> bookingList) {
+        public BookingAdapter(List<Dashboard.Booking> bookingList) {
             this.bookingList = bookingList;
         }
 
@@ -79,20 +62,14 @@ public class Dashboard extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull BookingViewHolder holder, int position) {
-            Booking booking = bookingList.get(position);
+            Dashboard.Booking booking = bookingList.get(position);
             holder.name.setText(booking.getName());
             holder.service.setText(booking.getService());
             holder.time.setText(booking.getTime());
             holder.status.setText(booking.getStatus());
 
-            // Status Styling
-            if (booking.getStatus().equalsIgnoreCase("Completed")) {
-                holder.status.setBackgroundColor(Color.parseColor("#E8F5E9"));
-                holder.status.setTextColor(Color.parseColor("#2E7D32"));
-            } else {
-                holder.status.setBackgroundColor(Color.parseColor("#FFF3E0"));
-                holder.status.setTextColor(Color.parseColor("#E65100"));
-            }
+            holder.status.setBackgroundColor(Color.parseColor("#FFF3E0"));
+            holder.status.setTextColor(Color.parseColor("#E65100"));
         }
 
         @Override
