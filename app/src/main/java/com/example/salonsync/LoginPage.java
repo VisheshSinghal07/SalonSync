@@ -39,9 +39,17 @@ public class LoginPage extends AppCompatActivity {
     }
 
     private void performLogin(String email, String password) {
-        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginPage.this, HomePage.class);
-        startActivity(intent);
+        // Mocking database check
+        // In a real app, you would query your database (Firebase, SQLite, etc.) here
+        if (email.equals("admin@salonsync.com")) {
+            Toast.makeText(this, "Admin Login Successful", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(LoginPage.this, Dashboard.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(LoginPage.this, HomePage.class);
+            startActivity(intent);
+        }
         finish();
     }
 }
