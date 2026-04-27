@@ -69,12 +69,11 @@ public class SalonDetailsActivity extends AppCompatActivity {
                 if (s.isSelected()) {
                     if (count == 0) selectedName = s.getName();
                     count++;
-                    // Extract number from "45 mins"
                     try {
                         String durationStr = s.getDuration().split(" ")[0];
                         totalDuration += Integer.parseInt(durationStr);
                     } catch (Exception e) {
-                        totalDuration += 30; // Default if parsing fails
+                        totalDuration += 30;
                     }
                 }
             }
@@ -89,6 +88,7 @@ public class SalonDetailsActivity extends AppCompatActivity {
             Intent intent = new Intent(this, TimeSelectionActivity.class);
             intent.putExtra("service_name", selectedName);
             intent.putExtra("total_duration", totalDuration);
+            intent.putExtra("total_price", totalPrice);
             startActivity(intent);
         });
     }

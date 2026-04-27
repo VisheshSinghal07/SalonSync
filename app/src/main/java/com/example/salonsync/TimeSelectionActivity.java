@@ -16,6 +16,7 @@ public class TimeSelectionActivity extends AppCompatActivity {
 
     private String selectedServiceName;
     private int totalDuration;
+    private int totalPrice;
     private String selectedTimeSlot;
     private TextView tvSelectedService, tvSelectedTime;
 
@@ -26,6 +27,7 @@ public class TimeSelectionActivity extends AppCompatActivity {
 
         selectedServiceName = getIntent().getStringExtra("service_name");
         totalDuration = getIntent().getIntExtra("total_duration", 30);
+        totalPrice = getIntent().getIntExtra("total_price", 0);
         
         if (selectedServiceName == null) selectedServiceName = "Service";
 
@@ -40,6 +42,9 @@ public class TimeSelectionActivity extends AppCompatActivity {
         btnContinue.setOnClickListener(v -> {
             if (selectedTimeSlot != null) {
                 Intent intent = new Intent(TimeSelectionActivity.this, PaymentActivity.class);
+                intent.putExtra("service_name", selectedServiceName);
+                intent.putExtra("total_price", totalPrice);
+                intent.putExtra("selected_time", "Today • " + selectedTimeSlot);
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Please select a time slot", Toast.LENGTH_SHORT).show();
