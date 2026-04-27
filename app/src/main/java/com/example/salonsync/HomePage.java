@@ -1,9 +1,11 @@
 package com.example.salonsync;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,6 +45,20 @@ public class HomePage extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void afterTextChanged(Editable s) {}
+        });
+
+        // 4. Bottom Navigation Logic
+        com.google.android.material.bottomnavigation.BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_profile) {
+                startActivity(new Intent(this, ViewProfileActivity.class));
+                return true;
+            } else if (id == R.id.nav_bookings) {
+                Toast.makeText(this, "Bookings clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            return true;
         });
     }
 

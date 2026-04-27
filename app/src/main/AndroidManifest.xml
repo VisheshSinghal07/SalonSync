@@ -36,6 +36,9 @@
             android:name=".TimeSelectionActivity"
             android:exported="false" />
         <activity
+            android:name=".ViewProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".PaymentActivity"
             android:exported="false"/>
         <activity

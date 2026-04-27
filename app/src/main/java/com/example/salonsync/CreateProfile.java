@@ -53,15 +53,28 @@ public class CreateProfile extends AppCompatActivity {
         // 4. Save Logic with Validation
         btnSave.setOnClickListener(v -> {
             String phone = etPhone.getText().toString().trim();
+            String city = spinnerCity.getSelectedItem().toString();
+            if (city.equals("Other")) {
+                city = etOtherCity.getText().toString().trim();
+            }
+            String gender = spinnerGender.getSelectedItem().toString();
 
             if (phone.length() != 10) {
                 etPhone.setError("Invalid number! Must be 10 digits.");
                 return;
             }
 
+            // Save to SharedPreferences
+            android.content.SharedPreferences prefs = getSharedPreferences("UserProfile", MODE_PRIVATE);
+            android.content.SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("phone", phone);
+            editor.putString("city", city);
+            editor.putString("gender", gender);
+            editor.apply();
+
             Toast.makeText(this, "Profile Saved Successfully", Toast.LENGTH_SHORT).show();
 
-            // Navigate to MainActivity (Home)
+            // Navigate to LoginPage
             Intent intent = new Intent(CreateProfile.this, LoginPage.class);
             startActivity(intent);
             finish();
