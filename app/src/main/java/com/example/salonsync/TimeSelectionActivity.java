@@ -39,7 +39,8 @@ public class TimeSelectionActivity extends AppCompatActivity {
         Button btnContinue = findViewById(R.id.btnContinue);
         btnContinue.setOnClickListener(v -> {
             if (selectedTimeSlot != null) {
-                Toast.makeText(this, "Booking confirmed for " + selectedTimeSlot, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(TimeSelectionActivity.this, PaymentActivity.class);
+                startActivity(intent);
             } else {
                 Toast.makeText(this, "Please select a time slot", Toast.LENGTH_SHORT).show();
             }
