@@ -24,6 +24,9 @@
             android:name=".SalonDetailsActivity"
             android:exported="false" />
         <activity
+            android:name=".TimeSelectionActivity"
+            android:exported="false" />
+        <activity
             android:name=".splashsrceen"
             android:exported="true">
             <intent-filter>

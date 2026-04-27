@@ -1,5 +1,6 @@
 package com.example.salonsync;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -59,5 +60,36 @@ public class SalonDetailsActivity extends AppCompatActivity {
 
         reviewAdapter = new ReviewAdapter(reviews);
         rvReviews.setAdapter(reviewAdapter);
+        btnBookNow.setOnClickListener(v -> {
+            String selectedName = "";
+            int totalDuration = 0;
+            int count = 0;
+
+            for (Service s : services) {
+                if (s.isSelected()) {
+                    if (count == 0) selectedName = s.getName();
+                    count++;
+                    // Extract number from "45 mins"
+                    try {
+                        String durationStr = s.getDuration().split(" ")[0];
+                        totalDuration += Integer.parseInt(durationStr);
+                    } catch (Exception e) {
+                        totalDuration += 30; // Default if parsing fails
+                    }
+                }
+            }
+
+            if (count == 0) {
+                android.widget.Toast.makeText(this, "Please select at least one service", android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (count > 1) selectedName = "Multiple Services (" + count + ")";
+
+            Intent intent = new Intent(this, TimeSelectionActivity.class);
+            intent.putExtra("service_name", selectedName);
+            intent.putExtra("total_duration", totalDuration);
+            startActivity(intent);
+        });
     }
 }
