@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">SalonSync</string>
+    <string name="payment_header">Payment</string>
+    <string name="booking_summary">Booking Summary</string>
+    <string name="luxe_beauty_lounge">Luxe Beauty Lounge</string>
+    <string name="lounge_address">128, Gurgaon</string>
+    <string name="service_detail">Service: Balayage &amp; Blowdry</string>
+    <string name="date_time_detail">Date &amp; Time: Mar 13, 2026 • 11:00 AM</string>
+    <string name="stylist_detail">Stylist: Sarah Jenkins</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="card_masked_info">•••• •••• •••• 4242\nExpires 12/28</string>
+    <string name="apple_pay">Apple Pay</string>
+    <string name="add_new_card">Add New Card</string>
+    <string name="price_breakdown">Price Breakdown</string>
+    <string name="service_price_label">Balayage &amp; Blowdry</string>
+    <string name="service_price_value">₹1200</string>
+    <string name="taxes_fees_label">Taxes &amp; Fees</string>
+    <string name="taxes_fees_value">₹120</string>
+    <string name="total_label">Total</string>
+    <string name="total_value">₹1320</string>
+    <string name="pay_now_with_amount">Pay Now ₹1320</string>
 </resources>
