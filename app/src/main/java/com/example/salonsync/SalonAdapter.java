@@ -1,5 +1,6 @@
 package com.example.salonsync;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,13 @@ public class SalonAdapter extends RecyclerView.Adapter<SalonAdapter.SalonViewHol
         Salon salon = salonList.get(position);
         holder.tvName.setText(salon.getName());
         holder.tvDetails.setText(salon.getRating() + " • " + salon.getDistance());
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), SalonDetailsActivity.class);
+            // In a real app, you would pass the salon ID or object here
+            // intent.putExtra("salon_id", salon.getId());
+            v.getContext().startActivity(intent);
+        });
 
         // Use Glide or Picasso here to load images from your Node.js server
         // Example: Glide.with(holder.itemView.getContext()).load(salon.getImageUrl()).into(holder.ivImage);
