@@ -12,10 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SalonSync">
         <activity
-            android:name=".Dashboard"
+            android:name=".AdminBookingsActivity"
             android:exported="false" />
         <activity
-            android:name=".PaymentActivity"
+            android:name=".Dashboard"
             android:exported="false" />
         <activity
             android:name=".BookingConfirmationActivity"
