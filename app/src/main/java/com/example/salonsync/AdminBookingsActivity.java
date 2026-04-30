@@ -41,8 +41,11 @@ public class AdminBookingsActivity extends AppCompatActivity {
             startActivity(new Intent(this, Dashboard.class));
             finish();
         });
-        
-        // navBookings is already active
+
+        findViewById(R.id.navSalon).setOnClickListener(v -> {
+            startActivity(new Intent(this, AdminSalonProfileActivity.class));
+            finish();
+        });
     }
 
     // Reuse adapter logic for simplicity in this activity
