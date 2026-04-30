@@ -5,10 +5,15 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
-import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,25 +21,26 @@ public class HomePage extends AppCompatActivity {
 
     private List<Salon> salonList;
     private SalonAdapter adapter;
+    private DatabaseReference salonsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        // 1. Initialize List with Dummy Data (Replace with PERN API call later)
         salonList = new ArrayList<>();
-        salonList.add(new Salon("Luxe Hair & Spa", "4.9", "1.2 km"));
-        salonList.add(new Salon("Glow Studio", "4.7", "2.5 km"));
-        salonList.add(new Salon("Tress & Trim", "4.5", "0.8 km"));
-
-        // 2. Setup RecyclerView
         RecyclerView recyclerView = findViewById(R.id.rvSalons);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new SalonAdapter(salonList);
         recyclerView.setAdapter(adapter);
 
-        // 3. Search Logic
+        // Firebase reference
+        salonsRef = FirebaseDatabase.getInstance("https://salonsync-a4c38-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("salons");
+
+        loadSalons();
+
+        // Search Logic
         EditText etSearch = findViewById(R.id.etSearch);
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -47,7 +53,7 @@ public class HomePage extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        // 4. Bottom Navigation Logic
+        // Bottom Navigation Logic
         com.google.android.material.bottomnavigation.BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -58,10 +64,37 @@ public class HomePage extends AppCompatActivity {
                 startActivity(new Intent(this, MyBookingsActivity.class));
                 return true;
             } else if (id == R.id.nav_home) {
-                // Already on Home
                 return true;
             }
             return true;
+        });
+    }
+
+    private void loadSalons() {
+        salonsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                salonList.clear();
+                for (DataSnapshot salonSnap : snapshot.getChildren()) {
+                    String id = salonSnap.getKey();
+                    String name = salonSnap.child("name").getValue(String.class);
+                    String rating = salonSnap.child("rating").getValue(String.class);
+                    
+                    // Prioritize encoded image for free storage
+                    String image = salonSnap.child("imageEncoded").getValue(String.class);
+                    if (image == null || image.isEmpty()) {
+                        image = salonSnap.child("imageUrl").getValue(String.class);
+                    }
+                    
+                    if (name != null) {
+                        salonList.add(new Salon(id, name, rating, image));
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "589513365875",
+    "project_id": "salonsync-a4c38",
+    "storage_bucket": "salonsync-a4c38.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589513365875:android:bfdf9983d73cdb07e80d06",
+        "android_client_info": {
+          "package_name": "com.example.salonsync"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8dmz6Rfo_DElv9L4EA6Yol91YxshqF_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
