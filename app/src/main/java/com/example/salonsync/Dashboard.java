@@ -39,12 +39,17 @@ public class Dashboard extends AppCompatActivity {
     }
 
     private void setupNavigation() {
+        findViewById(R.id.navSalon).setOnClickListener(v -> {
+            startActivity(new Intent(this, AdminSalonProfileActivity.class));
+        });
+
         findViewById(R.id.navBookings).setOnClickListener(v -> {
             startActivity(new Intent(this, AdminBookingsActivity.class));
         });
 
         findViewById(R.id.navServices).setOnClickListener(v -> {
             startActivity(new Intent(this, ManageSlotsActivity.class));
+            // Already handled or add specific activity
         });
     }
 

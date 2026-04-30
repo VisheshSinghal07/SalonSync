@@ -21,6 +21,9 @@
             android:name=".Dashboard"
             android:exported="false" />
         <activity
+            android:name=".AdminSalonProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".BookingConfirmationActivity"
             android:exported="false" />
         <activity
