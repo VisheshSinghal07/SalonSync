@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SalonSync">
         <activity
+            android:name=".MyBookingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ManageSlotsActivity"
             android:exported="false" />
         <activity
