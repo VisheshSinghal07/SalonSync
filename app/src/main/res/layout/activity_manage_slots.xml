@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <!-- Scroll Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manage Slots"
+                android:textColor="#1A1A1A"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <!-- Date Selector -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/dateContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/day1"
+                        style="@style/dayBox"
+                        android:text="Mon\n12" />
+
+                    <TextView
+                        android:id="@+id/day2"
+                        style="@style/dayBoxSelected"
+                        android:text="Tue\n13" />
+
+                    <TextView
+                        android:id="@+id/day3"
+                        style="@style/dayBox"
+                        android:text="Wed\n14" />
+
+                    <TextView
+                        android:id="@+id/day4"
+                        style="@style/dayBox"
+                        android:text="Thu\n15" />
+
+                    <TextView
+                        android:id="@+id/day5"
+                        style="@style/dayBox"
+                        android:text="Fri\n16" />
+
+                    <TextView
+                        android:id="@+id/day6"
+                        style="@style/dayBox"
+                        android:text="Sat\n17" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- Info Box -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="#FFF3E0"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:text="Set capacity for each slot. Create a time slot, then set separate limits for male and female bookings."
+                    android:textColor="#E65100"
+                    android:textSize="12sp" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Morning Header -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Morning Slots"
+                    android:textColor="#1A1A1A"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btnAddMorningSlot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="+ Add Slot"
+                    android:textColor="#C19A6B"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <!-- MORNING SLOTS CONTAINER -->
+            <LinearLayout
+                android:id="@+id/morningSlotsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <!-- Afternoon Header -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Afternoon Slots"
+                    android:textColor="#1A1A1A"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btnAddAfternoonSlot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="+ Add Slot"
+                    android:textColor="#C19A6B"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <!-- AFTERNOON SLOTS CONTAINER -->
+            <LinearLayout
+                android:id="@+id/afternoonSlotsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <LinearLayout
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/navDashboard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Dashboard"
+            android:textAlignment="center"
+            android:textColor="#757575" />
+
+        <TextView
+            android:id="@+id/navBookings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Bookings"
+            android:textAlignment="center"
+            android:textColor="#757575" />
+
+        <TextView
+            android:id="@+id/navServices"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Services"
+            android:textAlignment="center"
+            android:textColor="#C19A6B"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/navSalon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Salon"
+            android:textAlignment="center"
+            android:textColor="#757575" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

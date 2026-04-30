@@ -39,10 +39,11 @@ public class AdminBookingsActivity extends AppCompatActivity {
     private void setupNavigation() {
         findViewById(R.id.navDashboard).setOnClickListener(v -> {
             startActivity(new Intent(this, Dashboard.class));
-            finish();
         });
         
-        // navBookings is already active
+        findViewById(R.id.navServices).setOnClickListener(v -> {
+            startActivity(new Intent(this, ManageSlotsActivity.class));
+        });
     }
 
     // Reuse adapter logic for simplicity in this activity
