@@ -8,6 +8,14 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import androidx.annotation.NonNull;
+
 public class LoginPage extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
@@ -27,29 +35,89 @@ public class LoginPage extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         btnLogin.setOnClickListener(v -> {
-            String email = etEmail.getText().toString().trim();
+            String input = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
-            if (email.isEmpty() || password.isEmpty()) {
+            if (input.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             } else {
-                performLogin(email, password);
+                performLogin(input, password);
             }
         });
     }
 
-    private void performLogin(String email, String password) {
-        // Mocking database check
-        // In a real app, you would query your database (Firebase, SQLite, etc.) here
-        if (email.equals("admin@salonsync.com")) {
-            Toast.makeText(this, "Admin Login Successful", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(LoginPage.this, Dashboard.class);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(LoginPage.this, HomePage.class);
-            startActivity(intent);
+    private void performLogin(String input, String password) {
+        // Handle Admin Login Check
+        if (input.equalsIgnoreCase("admin@salonsync.com")) {
+            checkAdmin(input, password);
+            return;
         }
-        finish();
+
+        // Handle User Login (by Phone)
+        DatabaseReference reference = FirebaseDatabase.getInstance("https://salonsync-a4c38-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("users");
+
+        reference.child(input).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String dbPassword = snapshot.child("password").getValue(String.class);
+                    if (dbPassword != null && dbPassword.equals(password)) {
+                        
+                        // Save to SharedPreferences for Profile page
+                        SharedPreferences prefs = getSharedPreferences("UserProfile", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("name", snapshot.child("name").getValue(String.class));
+                        editor.putString("phone", snapshot.child("phone").getValue(String.class));
+                        editor.putString("city", snapshot.child("city").getValue(String.class));
+                        editor.putString("gender", snapshot.child("gender").getValue(String.class));
+                        editor.apply();
+
+                        Toast.makeText(LoginPage.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginPage.this, HomePage.class));
+                        finish();
+                    } else {
+                        Toast.makeText(LoginPage.this, "Invalid Password", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(LoginPage.this, "User does not exist", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(LoginPage.this, "Database Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void checkAdmin(String inputEmail, String inputPassword) {
+        DatabaseReference adminRef = FirebaseDatabase.getInstance("https://salonsync-a4c38-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("admin");
+
+        adminRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String dbEmail = snapshot.child("email").getValue(String.class);
+                    String dbPassword = snapshot.child("password").getValue(String.class);
+                    
+                    if (inputEmail.equalsIgnoreCase(dbEmail) && inputPassword.equals(dbPassword)) {
+                        Toast.makeText(LoginPage.this, "Admin Login Successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginPage.this, Dashboard.class));
+                        finish();
+                    } else {
+                        Toast.makeText(LoginPage.this, "Invalid Admin Credentials", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(LoginPage.this, "Admin node not found in database", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(LoginPage.this, "Database Error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

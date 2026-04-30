@@ -26,6 +26,43 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
+            <!-- Salon Image -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/ivSalonImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@android:drawable/ic_menu_gallery" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#4D000000" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnUploadImage"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Change Image"
+                        android:textColor="#FFFFFF"
+                        app:icon="@android:drawable/ic_menu_camera"
+                        app:iconTint="#FFFFFF" />
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Salon Basic Info -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -137,7 +174,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
         <TextView android:id="@+id/navDashboard" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Dashboard" android:textAlignment="center" android:textColor="#757575" />
         <TextView android:id="@+id/navBookings" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Bookings" android:textAlignment="center" android:textColor="#757575" />
-        <TextView android:id="@+id/navServices" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Services" android:textAlignment="center" android:textColor="#757575" />
+        <TextView android:id="@+id/navServices" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Slots" android:textAlignment="center" android:textColor="#757575" />
         <TextView android:id="@+id/navSalon" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Salon" android:textAlignment="center" android:textColor="#C19A6B" android:textStyle="bold" />
     </LinearLayout>
 

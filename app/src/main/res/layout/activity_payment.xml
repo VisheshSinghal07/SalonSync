@@ -46,17 +46,19 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/tvSalonName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/luxe_beauty_lounge"
+                    android:text="Luxe Beauty Lounge"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvSalonAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lounge_address"
+                    android:text="Address"
                     android:textSize="13sp" />
 
                 <View
@@ -66,23 +68,18 @@
                     android:background="#EEEEEE" />
 
                 <TextView
+                    android:id="@+id/tvBookingService"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/service_detail"
+                    android:text="Service: "
                     android:textColor="#555555" />
 
                 <TextView
+                    android:id="@+id/tvBookingDateTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@string/date_time_detail"
-                    android:textColor="#555555" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="@string/stylist_detail"
+                    android:text="Date &amp; Time: "
                     android:textColor="#555555" />
 
             </LinearLayout>
@@ -165,15 +162,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
+                        android:id="@+id/tvPriceLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/service_price_label"
+                        android:text="Service Price"
                         android:textColor="#555555" />
                     <TextView
+                        android:id="@+id/tvPriceValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="@string/service_price_value"
+                        android:text="₹0"
                         android:textColor="#555555" />
                 </RelativeLayout>
 
@@ -184,13 +183,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/taxes_fees_label"
+                        android:text="Taxes &amp; Fees"
                         android:textColor="#555555" />
                     <TextView
+                        android:id="@+id/tvTaxValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="@string/taxes_fees_value"
+                        android:text="₹0"
                         android:textColor="#555555" />
                 </RelativeLayout>
 
@@ -206,15 +206,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/total_label"
+                        android:text="Total"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                     <TextView
+                        android:id="@+id/tvTotalValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="@string/total_value"
+                        android:text="₹0"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />

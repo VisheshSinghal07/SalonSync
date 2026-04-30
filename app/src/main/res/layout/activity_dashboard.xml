@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Good morning,\nLuxe Beauty Lounge"
+                android:text="Good morning,\nChallonge"
                 android:textColor="#757575"
                 android:textSize="18sp" />
 
@@ -56,9 +56,10 @@
                         android:textColor="#E0FFFFFF" />
 
                     <TextView
+                        android:id="@+id/tvTodayEarnings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4500"
+                        android:text="0"
                         android:textColor="#FFFFFF"
                         android:textSize="44sp"
                         android:textStyle="bold" />
@@ -70,16 +71,18 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/tvTotalBookings"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="8 Bookings"
+                            android:text="0 Bookings"
                             android:textColor="#FFFFFF" />
 
                         <TextView
+                            android:id="@+id/tvActiveHrs"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="24dp"
-                            android:text="12 hrs active"
+                            android:text="0 hrs active"
                             android:textColor="#FFFFFF" />
                     </LinearLayout>
                 </LinearLayout>
@@ -109,7 +112,7 @@
                     app:cardElevation="0dp">
                     <LinearLayout android:padding="16dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:orientation="vertical">
                         <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@android:drawable/ic_menu_my_calendar" app:tint="#1A1A1A"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="4 Available" android:textStyle="bold"/>
+                        <TextView android:id="@+id/tvAvailableSlots" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="0 Available" android:textStyle="bold"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -122,25 +125,12 @@
                     app:cardElevation="0dp">
                     <LinearLayout android:padding="16dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:orientation="vertical">
                         <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@android:drawable/ic_menu_agenda" app:tint="#1A1A1A"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="8 Booked" android:textStyle="bold"/>
+                        <TextView android:id="@+id/tvBookedSlots" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="0 Booked" android:textStyle="bold"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Today's Bookings" android:textStyle="bold" android:textColor="#1A1A1A" android:textSize="18sp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="See All" android:textColor="#C19A6B" />
-            </RelativeLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvBookings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:nestedScrollingEnabled="false" />
 
         </LinearLayout>
     </ScrollView>
@@ -156,7 +146,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
         <TextView android:id="@+id/navDashboard" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Dashboard" android:textAlignment="center" android:textColor="#C19A6B" android:textStyle="bold" />
         <TextView android:id="@+id/navBookings" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Bookings" android:textAlignment="center" android:textColor="#757575" />
-        <TextView android:id="@+id/navServices" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Services" android:textAlignment="center" android:textColor="#757575" />
+        <TextView android:id="@+id/navServices" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Slots" android:textAlignment="center" android:textColor="#757575" />
         <TextView android:id="@+id/navSalon" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Salon" android:textAlignment="center" android:textColor="#757575" />
     </LinearLayout>
 

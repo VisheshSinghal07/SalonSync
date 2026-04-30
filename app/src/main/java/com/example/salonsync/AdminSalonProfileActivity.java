@@ -1,7 +1,13 @@
 package com.example.salonsync;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,45 +15,174 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AdminSalonProfileActivity extends AppCompatActivity {
 
-    private List<ServiceItem> services;
+    private List<ServiceItem> servicesList;
     private ServiceAdapter adapter;
+    private EditText etSalonName, etLocation;
+    private ImageView ivSalonImage;
+    private DatabaseReference salonRef;
+    private String encodedImage;
+
+    private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Uri imageUri = result.getData().getData();
+                    uploadToFirebaseAsBase64(imageUri);
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_salon_profile);
 
-        // 1. Setup Services RecyclerView
+        etSalonName = findViewById(R.id.etSalonName);
+        etLocation = findViewById(R.id.etLocation);
+        ivSalonImage = findViewById(R.id.ivSalonImage);
+        
         RecyclerView rvAdminServices = findViewById(R.id.rvAdminServices);
         rvAdminServices.setLayoutManager(new LinearLayoutManager(this));
 
-        services = new ArrayList<>();
-        services.add(new ServiceItem("Hair Cut", "₹ 500"));
-        services.add(new ServiceItem("Beard Trim", "₹ 200"));
-        services.add(new ServiceItem("Hair Color", "₹ 1200"));
-        services.add(new ServiceItem("Facial", "₹ 800"));
-
-        adapter = new ServiceAdapter(services);
+        servicesList = new ArrayList<>();
+        adapter = new ServiceAdapter(servicesList);
         rvAdminServices.setAdapter(adapter);
 
-        // 2. Button Listeners
-        findViewById(R.id.btnAddService).setOnClickListener(v -> showServiceDialog(null, -1));
+        salonRef = FirebaseDatabase.getInstance("https://salonsync-a4c38-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("salons").child("LuxeBeautyLounge");
 
-        findViewById(R.id.btnSaveProfile).setOnClickListener(v -> 
-            Toast.makeText(this, "Profile Saved Successfully", Toast.LENGTH_SHORT).show());
+        loadSalonData();
+
+        findViewById(R.id.btnUploadImage).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickImageLauncher.launch(intent);
+        });
+
+        findViewById(R.id.btnAddService).setOnClickListener(v -> showServiceDialog(null, -1));
+        findViewById(R.id.btnSaveProfile).setOnClickListener(v -> saveSalonData());
 
         setupNavigation();
+    }
+
+    private void uploadToFirebaseAsBase64(Uri uri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            
+            // Compress image to keep it under the Firebase limit
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos); 
+            byte[] imageBytes = baos.toByteArray();
+            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+            // Preview immediately
+            ivSalonImage.setImageBitmap(bitmap);
+
+            // Save the string to Realtime Database
+            salonRef.child("imageEncoded").setValue(encodedImage).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(this, "Image Saved!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        } catch (Exception e) {
+            Log.e("UploadError", e.getMessage());
+            Toast.makeText(this, "Failed to process image", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void loadSalonData() {
+        salonRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    etSalonName.setText(snapshot.child("name").getValue(String.class));
+                    etLocation.setText(snapshot.child("location").getValue(String.class));
+                    
+                    String loadedEncoded = snapshot.child("imageEncoded").getValue(String.class);
+                    if (loadedEncoded != null && !loadedEncoded.isEmpty()) {
+                        encodedImage = loadedEncoded;
+                        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        ivSalonImage.setImageBitmap(decodedByte);
+                    } else {
+                        ivSalonImage.setImageResource(R.drawable.salon);
+                    }
+                    
+                    servicesList.clear();
+                    DataSnapshot servicesSnap = snapshot.child("services");
+                    for (DataSnapshot s : servicesSnap.getChildren()) {
+                        String name = s.child("name").getValue(String.class);
+                        String price = s.child("price").getValue(String.class);
+                        servicesList.add(new ServiceItem(name, price));
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
+    private void saveSalonData() {
+        String name = etSalonName.getText().toString().trim();
+        String location = etLocation.getText().toString().trim();
+
+        if (name.isEmpty() || location.isEmpty()) {
+            Toast.makeText(this, "Please fill salon name and location", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Map<String, Object> salonData = new HashMap<>();
+        salonData.put("name", name);
+        salonData.put("location", location);
+        salonData.put("rating", "4.9");
+        if (encodedImage != null) {
+            salonData.put("imageEncoded", encodedImage);
+        }
+
+        Map<String, Object> servicesMap = new HashMap<>();
+        for (int i = 0; i < servicesList.size(); i++) {
+            Map<String, String> s = new HashMap<>();
+            s.put("name", servicesList.get(i).name);
+            s.put("price", servicesList.get(i).price);
+            servicesMap.put("service" + i, s);
+        }
+        salonData.put("services", servicesMap);
+
+        // USE updateChildren instead of setValue to avoid deleting slots/bookings!
+        salonRef.updateChildren(salonData).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(this, "Salon Profile Updated", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void showServiceDialog(ServiceItem item, int position) {
@@ -55,36 +190,25 @@ public class AdminSalonProfileActivity extends AppCompatActivity {
         TextInputEditText etName = dialogView.findViewById(R.id.etDialogServiceName);
         TextInputEditText etPrice = dialogView.findViewById(R.id.etDialogServicePrice);
 
-        String title = "Add New Service";
         if (item != null) {
-            title = "Edit Service";
             etName.setText(item.name);
-            // Remove ₹ symbol if exists for editing
-            String priceOnly = item.price.replace("₹ ", "");
-            etPrice.setText(priceOnly);
+            etPrice.setText(item.price.replace("₹ ", ""));
         }
 
         new AlertDialog.Builder(this)
-                .setTitle(title)
+                .setTitle(item == null ? "Add Service" : "Edit Service")
                 .setView(dialogView)
                 .setPositiveButton("Save", (dialog, which) -> {
                     String name = etName.getText().toString().trim();
                     String price = etPrice.getText().toString().trim();
-
                     if (!name.isEmpty() && !price.isEmpty()) {
-                        String formattedPrice = "₹ " + price;
                         if (item == null) {
-                            // Add new
-                            services.add(new ServiceItem(name, formattedPrice));
-                            adapter.notifyItemInserted(services.size() - 1);
+                            servicesList.add(new ServiceItem(name, "₹ " + price));
                         } else {
-                            // Update existing
                             item.name = name;
-                            item.price = formattedPrice;
-                            adapter.notifyItemChanged(position);
+                            item.price = "₹ " + price;
                         }
-                    } else {
-                        Toast.makeText(this, "Please enter all details", Toast.LENGTH_SHORT).show();
+                        adapter.notifyDataSetChanged();
                     }
                 })
                 .setNegativeButton("Cancel", null)
@@ -96,23 +220,24 @@ public class AdminSalonProfileActivity extends AppCompatActivity {
             startActivity(new Intent(this, Dashboard.class));
             finish();
         });
-
         findViewById(R.id.navBookings).setOnClickListener(v -> {
             startActivity(new Intent(this, AdminBookingsActivity.class));
             finish();
         });
+        findViewById(R.id.navServices).setOnClickListener(v -> {
+            startActivity(new Intent(this, ManageSlotsActivity.class));
+            finish();
+        });
     }
 
-    // --- DATA MODEL ---
     public static class ServiceItem {
-        String name, price;
+        public String name, price;
         public ServiceItem(String name, String price) {
             this.name = name;
             this.price = price;
         }
     }
 
-    // --- ADAPTER ---
     public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceViewHolder> {
         List<ServiceItem> serviceList;
         public ServiceAdapter(List<ServiceItem> serviceList) { this.serviceList = serviceList; }

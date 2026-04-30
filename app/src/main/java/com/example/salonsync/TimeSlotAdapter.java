@@ -65,6 +65,14 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSl
         });
     }
 
+    public void clearSelection() {
+        int previousSelected = selectedPosition;
+        selectedPosition = -1;
+        if (previousSelected != -1) {
+            notifyItemChanged(previousSelected);
+        }
+    }
+
     @Override
     public int getItemCount() {
         return timeSlots.size();

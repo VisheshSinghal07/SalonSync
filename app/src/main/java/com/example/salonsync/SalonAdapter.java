@@ -1,6 +1,9 @@
 package com.example.salonsync;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import java.util.List;
 
 public class SalonAdapter extends RecyclerView.Adapter<SalonAdapter.SalonViewHolder> {
@@ -29,12 +33,25 @@ public class SalonAdapter extends RecyclerView.Adapter<SalonAdapter.SalonViewHol
     public void onBindViewHolder(@NonNull SalonViewHolder holder, int position) {
         Salon salon = salonList.get(position);
         holder.tvName.setText(salon.getName());
-        holder.tvDetails.setText(salon.getRating() + " • " + salon.getDistance());
+        holder.tvDetails.setText(salon.getRating());
+
+        // Decode and show Base64 image if it exists, otherwise use fallback
+        if (salon.getImageUrl() != null && salon.getImageUrl().length() > 100) {
+            try {
+                byte[] decodedString = Base64.decode(salon.getImageUrl(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.ivImage.setImageBitmap(decodedByte);
+            } catch (Exception e) {
+                holder.ivImage.setImageResource(R.drawable.salon);
+            }
+        } else {
+            holder.ivImage.setImageResource(R.drawable.salon);
+        }
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), SalonDetailsActivity.class);
-            // In a real app, you would pass the salon ID or object here
-            // intent.putExtra("salon_id", salon.getId());
+            intent.putExtra("salon_id", salon.getId());
+            intent.putExtra("salon_name", salon.getName());
             v.getContext().startActivity(intent);
         });
 

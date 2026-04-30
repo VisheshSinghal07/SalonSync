@@ -11,7 +11,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Redirect to SignupActivity
-        startActivity(new Intent(this,splashsrceen.class));
+        startActivity(new Intent(this,SplashScreen.class));
         finish();
     }
 }
