@@ -55,7 +55,10 @@ public class HomePage extends AppCompatActivity {
                 startActivity(new Intent(this, ViewProfileActivity.class));
                 return true;
             } else if (id == R.id.nav_bookings) {
-                Toast.makeText(this, "Bookings clicked", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, MyBookingsActivity.class));
+                return true;
+            } else if (id == R.id.nav_home) {
+                // Already on Home
                 return true;
             }
             return true;
