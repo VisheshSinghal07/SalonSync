@@ -43,6 +43,7 @@ public class AdminBookingsActivity extends AppCompatActivity {
         
         findViewById(R.id.navServices).setOnClickListener(v -> {
             startActivity(new Intent(this, ManageSlotsActivity.class));
+        });
 
         findViewById(R.id.navSalon).setOnClickListener(v -> {
             startActivity(new Intent(this, AdminSalonProfileActivity.class));
