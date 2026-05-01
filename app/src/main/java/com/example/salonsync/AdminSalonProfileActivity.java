@@ -1,9 +1,12 @@
 package com.example.salonsync;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -21,10 +24,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,6 +61,15 @@ public class AdminSalonProfileActivity extends AppCompatActivity {
             }
     );
 
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    openGallery();
+                } else {
+                    Toast.makeText(this, "Permission Denied! Cannot upload image.", Toast.LENGTH_SHORT).show();
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,10 +91,8 @@ public class AdminSalonProfileActivity extends AppCompatActivity {
 
         loadSalonData();
 
-        findViewById(R.id.btnUploadImage).setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            pickImageLauncher.launch(intent);
-        });
+        findViewById(R.id.btnUploadImage).setOnClickListener(v -> checkPermissionAndOpenGallery());
+        findViewById(R.id.btnLogout).setOnClickListener(v -> logout());
 
         findViewById(R.id.btnAddService).setOnClickListener(v -> showServiceDialog(null, -1));
         findViewById(R.id.btnSaveProfile).setOnClickListener(v -> saveSalonData());
@@ -90,21 +100,47 @@ public class AdminSalonProfileActivity extends AppCompatActivity {
         setupNavigation();
     }
 
+    private void logout() {
+        Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(AdminSalonProfileActivity.this, LoginPage.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void checkPermissionAndOpenGallery() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+                openGallery();
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                openGallery();
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+        }
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickImageLauncher.launch(intent);
+    }
+
     private void uploadToFirebaseAsBase64(Uri uri) {
         try {
             InputStream inputStream = getContentResolver().openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
             
-            // Compress image to keep it under the Firebase limit
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos); 
             byte[] imageBytes = baos.toByteArray();
             encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-            // Preview immediately
             ivSalonImage.setImageBitmap(bitmap);
 
-            // Save the string to Realtime Database
             salonRef.child("imageEncoded").setValue(encodedImage).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(this, "Image Saved!", Toast.LENGTH_SHORT).show();
@@ -177,7 +213,6 @@ public class AdminSalonProfileActivity extends AppCompatActivity {
         }
         salonData.put("services", servicesMap);
 
-        // USE updateChildren instead of setValue to avoid deleting slots/bookings!
         salonRef.updateChildren(salonData).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(this, "Salon Profile Updated", Toast.LENGTH_SHORT).show();

@@ -32,7 +32,6 @@ public class SplashScreen extends AppCompatActivity {
                 Boolean connected = snapshot.getValue(Boolean.class);
                 if (connected != null && connected) {
                     Log.d("FirebaseStatus", "Connected to Firebase!");
-                    Toast.makeText(SplashScreen.this, "Database Online!", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.d("FirebaseStatus", "Not connected");
                 }

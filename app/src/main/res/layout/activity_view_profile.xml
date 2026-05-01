@@ -16,6 +16,17 @@
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="Back" />
 
+    <ImageButton
+        android:id="@+id/btnLogout"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_lock_power_off"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#D32F2F"
+        android:contentDescription="Logout" />
+
     <TextView
         android:id="@+id/tvProfileTitle"
         android:layout_width="wrap_content"
