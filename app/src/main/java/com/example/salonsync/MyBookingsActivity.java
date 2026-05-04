@@ -41,7 +41,10 @@ public class MyBookingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_bookings);
 
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+        findViewById(R.id.btnBack).setOnClickListener(v -> {
+            startActivity(new Intent(this, HomePage.class));
+            finish();
+        });
 
         SharedPreferences prefs = getSharedPreferences("UserProfile", MODE_PRIVATE);
         userPhone = prefs.getString("phone", "");

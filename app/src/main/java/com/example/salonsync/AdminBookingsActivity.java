@@ -71,6 +71,8 @@ public class AdminBookingsActivity extends AppCompatActivity {
     }
 
     private void setupNavigation() {
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+
         findViewById(R.id.navDashboard).setOnClickListener(v -> {
             startActivity(new Intent(this, Dashboard.class));
             finish();
